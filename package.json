@@ -11,7 +11,7 @@
     "dev:docker:up:build": "docker compose up --build -d",
     "dev:docker:down": "docker compose down -v",
     "setup:local": "docker compose -f docker-compose.test.yml down -v && docker compose -f docker-compose.test.yml up -d",
-    "teardown:local": "docker compose -f docker-compose.test.yml down -v && docker compose -f docker-compose.test.yml up -d",
+    "teardown:local": "docker compose -f docker-compose.test.yml down -v",
     "debug": "nodemon -r tsconfig-paths/register --exec 'node --inspect=0.0.0.0:9229 -r ts-node/register' src/index.ts",
     "test": "jest --config jest.config.js",
     "test:unit": "jest --selectProjects unit --coverage",

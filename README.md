@@ -840,14 +840,14 @@ The middleware sets standard rate limit headers:
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/karolvv/compliments-api.git
    cd compliments-api
    ```
 
 2. Create your environment file:
 
    ```bash
-   cp .env.example .env
+   cp .env.sample .env
    ```
 
 3. Choose ONE of these methods to start the development environment:
@@ -899,7 +899,7 @@ The middleware sets standard rate limit headers:
 
    ```bash
    # Start the application
-   docker compose up --build
+   docker compose up --build -d
 
    # To stop the application:
    docker compose down -v

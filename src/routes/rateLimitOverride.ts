@@ -1,6 +1,9 @@
+import {CACHE_TTL} from '@configs/cache';
 import {RateLimitOverrideController} from '@controllers/rateLimitOverride';
 import {RateLimitOverrideService} from '@services/rateLimitOverride';
 import {Router} from 'express';
+import cacheMiddleware from '@middlewares/caching';
+import redisClient from '@configs/redis';
 
 const rateLimitOverridesRouter = Router();
 const rateLimitOverrideService = new RateLimitOverrideService();
@@ -150,6 +153,7 @@ const rateLimitOverrideController = new RateLimitOverrideController(
 
 rateLimitOverridesRouter.get(
   '/',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
   rateLimitOverrideController.getRecentOverrides.bind(
     rateLimitOverrideController,
   ),
@@ -190,6 +194,7 @@ rateLimitOverridesRouter.get(
  */
 rateLimitOverridesRouter.get(
   '/active',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
   rateLimitOverrideController.getActivePathOverrides.bind(
     rateLimitOverrideController,
   ),

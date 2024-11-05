@@ -1,8 +1,11 @@
+import {authorizationMiddleware} from '@middlewares/authorization';
+import {CACHE_TTL} from '@configs/cache';
 import {Router} from 'express';
+import {USER_ROLES} from '@utils/constants';
 import {UserController} from '@controllers/user';
 import {UserService} from '@services/user';
-import {USER_ROLES} from '@utils/constants';
-import {authorizationMiddleware} from '@middlewares/authorization';
+import cacheMiddleware from '@middlewares/caching';
+import redisClient from '@configs/redis';
 
 const userRouter = Router();
 const userService = new UserService();
@@ -75,6 +78,7 @@ const userController = new UserController(userService);
  */
 userRouter.get(
   '/user/:username',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
   userController.getUserByUsername.bind(userController),
 );
 
@@ -113,7 +117,11 @@ userRouter.get(
  *                   type: string
  *                   example: "User not found"
  */
-userRouter.get('/:id', userController.getUserById.bind(userController));
+userRouter.get(
+  '/:id',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
+  userController.getUserById.bind(userController),
+);
 
 /**
  * @swagger
@@ -150,7 +158,11 @@ userRouter.get('/:id', userController.getUserById.bind(userController));
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-userRouter.get('/', userController.getUsers.bind(userController));
+userRouter.get(
+  '/',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
+  userController.getUsers.bind(userController),
+);
 
 /**
  * @swagger

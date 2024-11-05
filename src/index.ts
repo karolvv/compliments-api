@@ -14,8 +14,6 @@ import requestLoggerMiddleware from '@middlewares/requestLogger';
 import {router} from '@routes/index';
 import redisClient from '@configs/redis';
 import dotenv from 'dotenv';
-import cacheMiddleware from '@middlewares/caching';
-import {CACHE_TTL} from '@configs/cache';
 
 dotenv.config();
 const enableGlobalRateLimit = process.env.ENABLE_GLOBAL_RATE_LIMIT === 'true';
@@ -52,14 +50,7 @@ app.use(cookieParser());
 //// JWT Authentication
 app.use('/api', authenticationMiddleware);
 //// Routes
-app.use(
-  '/api',
-  cacheMiddleware(
-    redisClient,
-    isTestEnvironment ? CACHE_TTL.NO_CACHE : CACHE_TTL.EXTREMELY_SHORT,
-  ),
-  router,
-);
+app.use('/api', router);
 //// Error handling
 app.use(errorHandlingMiddleware);
 

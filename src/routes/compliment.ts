@@ -1,6 +1,9 @@
 import {Router} from 'express';
 import {ComplimentController} from '@controllers/compliment';
 import {ComplimentService} from '@services/compliment';
+import redisClient from '@configs/redis';
+import cacheMiddleware from '@middlewares/caching';
+import {CACHE_TTL} from '@configs/cache';
 
 const complimentRouter = Router();
 const complimentService = new ComplimentService();
@@ -60,6 +63,7 @@ const complimentController = new ComplimentController(complimentService);
  */
 complimentRouter.get(
   '/random',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
   complimentController.getRandomCompliment.bind(complimentController),
 );
 
@@ -101,6 +105,7 @@ complimentRouter.get(
  */
 complimentRouter.get(
   '/:id',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
   complimentController.getComplimentById.bind(complimentController),
 );
 
@@ -180,6 +185,7 @@ complimentRouter.get(
  */
 complimentRouter.get(
   '/',
+  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
   complimentController.getCompliments.bind(complimentController),
 );
 

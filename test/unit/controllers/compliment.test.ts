@@ -2,7 +2,7 @@ import {ComplimentController} from '@controllers/compliment';
 import {ComplimentService} from '@services/compliment';
 import {Request, Response, NextFunction} from 'express';
 import {ForbiddenError, ValidationError} from '@utils/errors';
-import {ComplimentDocument} from '@models/compliment';
+import {ComplimentDocument} from '@app/types/compliment';
 import {PaginatedResponse} from '@app/types/shared';
 import {HTTP_STATUS_CODES, USER_ROLES} from '@utils/constants';
 import {ZodError} from 'zod';

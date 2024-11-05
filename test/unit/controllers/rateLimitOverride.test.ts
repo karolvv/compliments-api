@@ -4,7 +4,7 @@ import {ValidationError} from '@utils/errors';
 import {TIME_IN_MS, USER_ROLES} from '@utils/constants';
 import {Request, Response} from 'express';
 import {Types} from 'mongoose';
-import {RateLimitOverrideDocument} from '@models/rateLimitOverride';
+import {RateLimitOverrideDocument} from '@app/types/rateLimiter';
 
 // Mock dependencies
 jest.mock('@services/rateLimitOverride');

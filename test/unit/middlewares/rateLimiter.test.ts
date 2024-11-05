@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import {RateLimiter, RateLimitOptions} from '@middlewares/rateLimiter';
+import {RateLimitOptions} from '@app/types/rateLimiter';
+import {RateLimiter} from '@middlewares/rateLimiter';
 import {RateLimitError} from '@utils/errors';
 import Redis from 'ioredis';
 import jwt from 'jsonwebtoken';

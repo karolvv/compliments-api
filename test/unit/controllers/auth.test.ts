@@ -1,5 +1,5 @@
 import {AuthenticationController} from '@controllers/auth';
-import {UserDocument} from '@models/user';
+import {UserDocument} from '@app/types/user';
 import {AuthenticationService} from '@services/auth';
 import {HTTP_STATUS_CODES} from '@utils/constants';
 import {Request, Response, NextFunction} from 'express';

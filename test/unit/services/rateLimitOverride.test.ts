@@ -3,7 +3,7 @@ import {RateLimitOverride} from '@models/rateLimitOverride';
 import {TIME_IN_MS} from '@utils/constants';
 import {ConflictError} from '@utils/errors';
 import {Types} from 'mongoose';
-import {RateLimitConfig} from '@middlewares/rateLimiter';
+import {RateLimitConfig} from '@app/types/rateLimiter';
 
 jest.mock('@models/rateLimitOverride');
 

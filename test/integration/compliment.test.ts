@@ -57,16 +57,26 @@ describe('Compliments Routes Integration Tests', () => {
           .post('/api/compliments')
           .set('Authorization', `Bearer ${userAccessToken}`)
           .send({text: `Compliment ${i}`});
+
+        expect(response.status).toBe(HTTP_STATUS_CODES.CREATED);
         compliments.push(response.body);
       }
 
+      // Verify all compliments were created
+      const allCompliments = await testRequest
+        .get('/api/compliments')
+        .set('Authorization', `Bearer ${userAccessToken}`);
+
+      expect(allCompliments.body.data.length).toBe(10);
+
+      // Test pagination
       const response = await testRequest
         .get('/api/compliments?page=1&limit=10')
         .set('Authorization', `Bearer ${userAccessToken}`);
 
       expect(response.status).toBe(HTTP_STATUS_CODES.OK);
       expect(response.body.data.length).toBe(10);
-      expect(response.body.data[0].text).toBe('Compliment 14'); // Most recent should be the first item
+      expect(response.body.data[0].text).toBe('Compliment 14');
       expect(response.body).toMatchObject({
         page: 1,
         totalPages: 2,

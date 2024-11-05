@@ -28,6 +28,8 @@ const rateLimiter = new RateLimiter(
   enableGlobalRateLimit,
 );
 
+const isTestEnvironment = process.env.NODE_ENV === 'test';
+
 // Middleware
 //// Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecification));
@@ -52,7 +54,10 @@ app.use('/api', authenticationMiddleware);
 //// Routes
 app.use(
   '/api',
-  cacheMiddleware(redisClient, CACHE_TTL.EXTREMELY_SHORT),
+  cacheMiddleware(
+    redisClient,
+    isTestEnvironment ? CACHE_TTL.NO_CACHE : CACHE_TTL.EXTREMELY_SHORT,
+  ),
   router,
 );
 //// Error handling
@@ -72,7 +77,7 @@ async function initializeDatabase() {
 
 // Start server and export server instance
 let server: ReturnType<typeof app.listen>;
-if (process.env.NODE_ENV !== 'test') {
+if (!isTestEnvironment) {
   server = app.listen(port, async () => {
     await initializeDatabase();
     console.log(`[server]: Server is running on http://localhost:${port}`);

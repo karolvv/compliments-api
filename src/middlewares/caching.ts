@@ -22,7 +22,9 @@ const cacheMiddleware = (redisClient: Redis, ttl: number) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       res.send = (body: any): Response<any, Record<string, any>> => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          void redisClient.set(key, body, 'EX', ttl);
+          if (ttl) {
+            void redisClient.set(key, body, 'EX', ttl);
+          }
           res.setHeader('X-Cache-TTL', ttl.toString());
         }
         return originalSend(body);

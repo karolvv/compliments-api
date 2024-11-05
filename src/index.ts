@@ -64,9 +64,6 @@ app.use((req, res, next) => {
   next(new NotFoundError(path));
 });
 
-// Export app for testing
-export {app};
-
 // Initialize database
 async function initializeDatabase() {
   const db = new Database();
@@ -82,4 +79,13 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-export {server};
+// Add a cleanup function
+export async function cleanup() {
+  if (server) {
+    await new Promise<void>(resolve => {
+      server.close(() => resolve());
+    });
+  }
+}
+
+export {server, app};

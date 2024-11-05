@@ -9,6 +9,7 @@ async function globalSetup() {
   // Set up test environment variables
   process.env = {
     ...process.env,
+    NODE_ENV: 'test',
     PORT: '3000',
     DATABASE_URL: 'mongodb://admin:password@localhost:27017/compliments',
     LOG_LEVEL: 'debug',

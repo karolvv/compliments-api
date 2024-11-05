@@ -1,0 +1,65 @@
+name: compliments-test
+services:
+  mongodb:
+    container_name: ct-mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: compliments
+      MONGODB_ENABLE_NUMACTL: 'true'
+    volumes:
+      - mongo-data:/data/db:delegated
+      - ./mongo/init-db.d:/docker-entrypoint-initdb.d:ro
+    command:
+      [
+        'mongod',
+        '--wiredTigerCacheSizeGB',
+        '1',
+        '--setParameter',
+        'maxTransactionLockRequestTimeoutMillis=5000',
+        '--setParameter',
+        'transactionLifetimeLimitSeconds=30',
+      ]
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 2s
+      timeout: 5s
+      retries: 3
+    ulimits:
+      nofile:
+        soft: 64000
+        hard: 64000
+
+  redis:
+    container_name: ct-redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data:delegated
+    command: >
+      redis-server
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save ""
+      --appendonly no
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      timeout: 5s
+      retries: 3
+    sysctls:
+      net.core.somaxconn: '511'
+
+volumes:
+  redis-data:
+  mongo-data:
+
+networks:
+  default:
+    name: compliments-test-network

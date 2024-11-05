@@ -1,0 +1,8 @@
+export const CACHE_TTL = {
+  NO_CACHE: 0,
+  DEFAULT: 300,
+  EXTREMELY_SHORT: 2,
+  VERY_SHORT: 10,
+  SHORT: 60,
+  LONG: 3600,
+};

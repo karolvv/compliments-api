@@ -1,0 +1,79 @@
+name: compliments-dev
+services:
+  mongodb:
+    container_name: cd-mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: compliments
+    volumes:
+      - mongo-data:/data/db
+      - ./mongo/init-db.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  redis:
+    container_name: cd-redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    container_name: cd-api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '4000:3000' # API port
+      - '9229:9229' # Node.js debugging port
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      LOG_LEVEL: ${LOG_LEVEL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      ENABLE_GLOBAL_RATE_LIMIT: ${ENABLE_GLOBAL_RATE_LIMIT}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run debug # Uses nodemon --inspect for hot-reloading and debugging
+    depends_on:
+      - mongodb
+      - redis
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  redis-data:
+  mongo-data:
+
+networks:
+  default:
+    name: compliments-dev-network

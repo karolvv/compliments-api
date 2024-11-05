@@ -1,0 +1,27 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "target": "ES2023",
+    "esModuleInterop": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "types": ["node", "jest", "supertest"],
+    "skipLibCheck": true,
+    "paths": {
+      "@configs/*": ["src/configs/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@routes/*": ["src/routes/*"],
+      "@models/*": ["src/models/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@services/*": ["src/services/*"],
+      "@app/types/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"]
+    }
+  },
+  "exclude": ["dist"]
+}

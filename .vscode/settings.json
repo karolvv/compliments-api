@@ -1,0 +1,41 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "prettier.configPath": ".prettierrc.js",
+  "jest.runMode": "on-demand",
+  "cSpell.words": [
+    "bolek",
+    "boleks",
+    "bson",
+    "existinguser",
+    "flushall",
+    "frameguard",
+    "hsts",
+    "instanceof",
+    "johndoe",
+    "karolvv",
+    "nestjs",
+    "newuser",
+    "openapi",
+    "posttest",
+    "productionised",
+    "ratelimit",
+    "regularuser",
+    "testuser",
+    "typeof",
+    "unopinionated",
+    "userpass",
+    "uuidv",
+    "WITHSCORES",
+    "wrongpassword",
+    "ZADD",
+    "ZCOUNT",
+    "ZRANGE",
+    "ZREMRANGEBYSCORE",
+    "ZSET"
+  ]
+}
